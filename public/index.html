@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EB Usage Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <h1>EB Usage Calculator</h1>
+
+    <div class="top-section">
+
+        <div class="appliances">
+
+            <div class="appliance active" onclick="selectAppliance('tv', this)">
+                <img src="images/tv.jpg" alt="TV">
+                <h3>TV</h3>
+                <span id="tvStatus">OFF</span>
+            </div>
+
+            <div class="appliance" onclick="selectAppliance('washing', this)">
+                <img src="images/washing-machine.jpg" alt="Washing Machine">
+                <h3>Washing Machine</h3>
+                <span id="washingStatus">OFF</span>
+            </div>
+
+            <div class="appliance" onclick="selectAppliance('light', this)">
+                <img src="images/light.jpg" alt="Light">
+                <h3>Light</h3>
+                <span id="lightStatus">OFF</span>
+            </div>
+
+            <div class="appliance" onclick="selectAppliance('fridge', this)">
+                <img src="images/fridge.jpg" alt="Fridge">
+                <h3>Fridge</h3>
+                <span id="fridgeStatus">OFF</span>
+            </div>
+
+            <div class="appliance" onclick="selectAppliance('fan', this)">
+                <img src="images/fan.png" alt="Fan">
+                <h3>Fan</h3>
+                <span id="fanStatus">OFF</span>
+            </div>
+
+        </div>
+
+        <div class="top-total">
+            <h2>Total Usage</h2>
+
+            <p>Total Unit</p>
+            <h1 id="totalUnit">0.00</h1>
+
+            <p>Total Amount</p>
+            <h1>₹<span id="totalAmount">0.00</span></h1>
+        </div>
+
+    </div>    
+
+
+        <div class="main">
+
+            <div class="details-list">
+
+                <!-- TV -->
+
+                <div class="details" id="details-tv">
+                    <h2>TV</h2>
+
+                    <div class="device">
+                        <img src="images/tv.jpg" alt="TV">  
+
+                        <div class="power">
+                            <h3>Power Control</h3>
+
+                            <label class="switch">
+                                <input type="checkbox" id="power-tv"
+                                    onchange="changePower('tv')">
+                                <span class="slider"></span>
+                            </label>
+
+                            <p id="powerText-tv">Switch is OFF</p>
+                        </div>
+
+                        <div class="info">
+                            <div>
+                                <p>Minutes</p>
+                                <h2 id="time-tv">0m 0s</h2>
+                            </div>
+
+                            <div>
+                                <p>Unit</p>
+                                <h2 id="unit-tv">0.00</h2>
+                            </div>
+
+                            <div>
+                                <p>Amount</p>
+                                <h2>₹<span id="amount-tv">0.00</span></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="saveUsage('tv')">
+                        Save Usage
+                    </button>
+                </div>
+
+
+                <!-- Washing Machine -->
+
+                <div class="details" id="details-washing">
+                    <h2>Washing Machine</h2>
+
+                    <div class="device">
+                        <img src="images/washing-machine.jpg" alt="Washing Machine">
+
+                        <div class="power">
+                            <h3>Power Control</h3>
+
+                            <label class="switch">
+                                <input type="checkbox" id="power-washing"
+                                    onchange="changePower('washing')">
+                                <span class="slider"></span>
+                            </label>
+
+                            <p id="powerText-washing">Switch is OFF</p>
+                        </div>
+
+                        <div class="info">
+                            <div>
+                                <p>Minutes</p>
+                                <h2 id="time-washing">0m 0s</h2>
+                            </div>
+
+                            <div>
+                                <p>Unit</p>
+                                <h2 id="unit-washing">0.00</h2>
+                            </div>
+
+                            <div>
+                                <p>Amount</p>
+                                <h2>₹<span id="amount-washing">0.00</span></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="saveUsage('washing')">
+                        Save Usage
+                    </button>
+                </div>
+
+
+                <!-- Light -->
+
+                <div class="details" id="details-light">
+                    <h2>Light</h2>
+
+                    <div class="device">
+                        <img src="images/light.jpg" alt="Light">
+
+                        <div class="power">
+                            <h3>Power Control</h3>
+
+                            <label class="switch">
+                                <input type="checkbox" id="power-light"
+                                    onchange="changePower('light')">
+                                <span class="slider"></span>
+                            </label>
+
+                            <p id="powerText-light">Switch is OFF</p>
+                        </div>
+
+                        <div class="info">
+                            <div>
+                                <p>Minutes</p>
+                                <h2 id="time-light">0m 0s</h2>
+                            </div>
+
+                            <div>
+                                <p>Unit</p>
+                                <h2 id="unit-light">0.00</h2>
+                            </div>
+
+                            <div>
+                                <p>Amount</p>
+                                <h2>₹<span id="amount-light">0.00</span></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="saveUsage('light')">
+                        Save Usage
+                    </button>
+                </div>
+
+
+                <!-- Fridge -->
+
+                <div class="details" id="details-fridge">
+                    <h2>Fridge</h2>
+
+                    <div class="device">
+                        <img src="images/fridge.jpg" alt="Fridge">
+
+                        <div class="power">
+                            <h3>Power Control</h3>
+
+                            <label class="switch">
+                                <input type="checkbox" id="power-fridge"
+                                    onchange="changePower('fridge')">
+                                <span class="slider"></span>
+                            </label>
+
+                            <p id="powerText-fridge">Switch is OFF</p>
+                        </div>
+
+                        <div class="info">
+                            <div>
+                                <p>Minutes</p>
+                                <h2 id="time-fridge">0m 0s</h2>
+                            </div>
+
+                            <div>
+                                <p>Unit</p>
+                                <h2 id="unit-fridge">0.00</h2>
+                            </div>
+
+                            <div>
+                                <p>Amount</p>
+                                <h2>₹<span id="amount-fridge">0.00</span></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="saveUsage('fridge')">
+                        Save Usage
+                    </button>
+                </div>
+
+
+                <!-- Fan -->
+
+                <div class="details" id="details-fan">
+                    <h2>Fan</h2>
+
+                    <div class="device">
+                        <img src="images/fan.png" alt="Fan">
+
+                        <div class="power">
+                            <h3>Power Control</h3>
+
+                            <label class="switch">
+                                <input type="checkbox" id="power-fan"
+                                    onchange="changePower('fan')">
+                                <span class="slider"></span>
+                            </label>
+
+                            <p id="powerText-fan">Switch is OFF</p>
+                        </div>
+
+                        <div class="info">
+                            <div>
+                                <p>Minutes</p>
+                                <h2 id="time-fan">0m 0s</h2>
+                            </div>
+
+                            <div>
+                                <p>Unit</p>
+                                <h2 id="unit-fan">0.00</h2>
+                            </div>
+
+                            <div>
+                                <p>Amount</p>
+                                <h2>₹<span id="amount-fan">0.00</span></h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="saveUsage('fan')">
+                        Save Usage
+                    </button>
+                </div>
+
+            </div>
+
+
+            <!-- Right Side -->
+
+            <div class="right">
+
+                <!-- <div class="total">
+                    <h2>Total Usage</h2>
+
+                    <p>Total Unit</p>
+                    <h1 id="totalUnit">0.00</h1>
+
+                    <p>Total Amount</p>
+                    <h1>₹<span id="totalAmount">0.00</span></h1>
+                </div> -->
+
+
+                <div class="breakdown">
+                    <h3>Appliance Breakdown</h3>
+
+                    <table>
+                        <tr>
+                            <th>Device</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th>Unit</th>
+                            <th>Amount</th>
+                        </tr>
+
+                        <tr>
+                            <td>TV</td>
+                            <td id="tableTvStatus">OFF</td>
+                            <td id="tableTvTime">0m 0s</td>
+                            <td id="tableTvUnit">0.00</td>
+                            <td id="tableTvAmount">₹0.00</td>
+                        </tr>
+
+                        <tr>
+                            <td>Washing</td>
+                            <td id="tableWashingStatus">OFF</td>
+                            <td id="tableWashingTime">0m 0s</td>
+                            <td id="tableWashingUnit">0.00</td>
+                            <td id="tableWashingAmount">₹0.00</td>
+                        </tr>
+
+                        <tr>
+                            <td>Light</td>
+                            <td id="tableLightStatus">OFF</td>
+                            <td id="tableLightTime">0m 0s</td>
+                            <td id="tableLightUnit">0.00</td>
+                            <td id="tableLightAmount">₹0.00</td>
+                        </tr>
+
+                        <tr>
+                            <td>Fridge</td>
+                            <td id="tableFridgeStatus">OFF</td>
+                            <td id="tableFridgeTime">0m 0s</td>
+                            <td id="tableFridgeUnit">0.00</td>
+                            <td id="tableFridgeAmount">₹0.00</td>
+                        </tr>
+
+                        <tr>
+                            <td>Fan</td>
+                            <td id="tableFanStatus">OFF</td>
+                            <td id="tableFanTime">0m 0s</td>
+                            <td id="tableFanUnit">0.00</td>
+                            <td id="tableFanAmount">₹0.00</td>
+                        </tr>
+                    </table>
+
+                    <button onclick="turnAllOn()">Turn All ON</button>
+                    <button onclick="turnAllOff()">Turn All OFF</button>
+                    <button onclick="resetAll()">Reset</button>
+                </div>
+
+                <div class="history">
+                    <h3>Saved Usage History</h3>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Device</th>
+                                <th>Time</th>
+                                <th>Unit</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usageHistory">
+                            <tr>
+                                <td colspan="5">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
