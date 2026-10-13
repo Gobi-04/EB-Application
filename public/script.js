@@ -258,11 +258,15 @@ function saveUsage(name) {
         return response.json();
     })
     .then(function(data) {
-        console.log(data);
+        console.log("Saved Successfully:",data);
         alert("Usage saved successfully!");
+        if(typeof loadUsageHistory === "function") {
+            loadUsageHistory();
+        }
     })
     .catch(function(error) {
         console.log("Error:", error);
+        alert("Saving usage failed: " + error.message);
     });
 }
 
