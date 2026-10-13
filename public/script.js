@@ -270,6 +270,11 @@ function saveUsage(name) {
     });
 }
 
+let allUsageRecords = [];
+let showAllHistory = false;
+
+//Load records from database
+
 function loadUsageHistory() {
 
     fetch("/api/usage")
@@ -278,46 +283,116 @@ function loadUsageHistory() {
         })
         .then(function(records) {
 
-            let history = document.getElementById("usageHistory");
+            allUsageRecords = records;
+            showAllHistory = false;
 
-            history.innerHTML = "";
-
-            if (records.length === 0) {
-                history.innerHTML =
-                    "<tr><td colspan='5'>No records found</td></tr>";
-                return;
-            }
-
-            records.forEach(function(item) {
-
-                let seconds = Number(item.seconds);
-                let minutes = Math.floor(seconds / 60);
-                let remainingSeconds = seconds % 60;
-
-                let row = document.createElement("tr");
-
-                let values = [
-                    item.appliance,
-                    minutes + "m " + remainingSeconds + "s",
-                    Number(item.units).toFixed(2),
-                    "₹" + Number(item.amount).toFixed(2),
-                    new Date(item.created_at).toLocaleString()
-                ];
-
-                values.forEach(function(value) {
-                    let cell = document.createElement("td");
-                    cell.textContent = value;
-                    row.appendChild(cell);
-                });
-
-                history.appendChild(row);
-
-            });
-
+            displayUsageHistory();
         })
         .catch(function(error) {
             console.log("History loading error:", error);
         });
+    }
+
+    // Display history
+
+function displayUsageHistory() {
+    let history = document.getElementById("usageHistory");
+    let showMoreBtn = document.getElementById("showMorebtn");
+
+    history.innerHTML = "";
+
+//initially show only 5 records, if more than 5 records exist, show "Show More" button
+    let recordsToShow = showAllHistory ? allUsageRecords : allUsageRecords.slice(0, 5);
+    if(allUsageRecords.length === 0) {
+        history.innerHTML = "<tr><td colspan='5'>No records found</td></tr>";
+        showMoreBtn.style.display = "none";
+        return;
+    }
+
+    recordsToShow.forEach(function(item) {
+
+        let seconds = Number(item.seconds);
+        let minutes = Math.floor(seconds / 60);
+        let remainingSeconds = seconds % 60;
+
+        let values = [
+            item.appliance,
+            minutes + "m " + remainingSeconds + "s",
+            Number(item.units).toFixed(2),
+            "₹" + Number(item.amount).toFixed(2),
+            new Date(item.created_at).toLocaleString()
+        ];
+
+        let row = document.createElement("tr");
+
+        values.forEach(function(value) {
+            let cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+        });
+
+        history.appendChild(row);
+
+    });
+
+    // 5 mela records irundha button show more display pannum, otherwise hide pannum
+    if(allUsageRecords.length > 5) {
+        showMoreBtn.style.display = "inline-block";
+        showMoreBtn.textContent = showAllHistory ? "Show Less" : "Show More";
+    } else {
+        showMoreBtn.style.display = "none";
+    }
 }
 
+// see more and see less button 
+function showMoreHistory() {
+    showAllHistory = !showAllHistory;
+    displayUsageHistory();
+}
+
+// Initial load 
 loadUsageHistory();
+
+//             let history = document.getElementById("usageHistory");
+
+//             history.innerHTML = "";
+
+//             if (records.length === 0) {
+//                 history.innerHTML =
+//                     "<tr><td colspan='5'>No records found</td></tr>";
+//                 return;
+//             }
+
+//             records.forEach(function(item) {
+
+//                 let seconds = Number(item.seconds);
+//                 let minutes = Math.floor(seconds / 60);
+//                 let remainingSeconds = seconds % 60;
+
+//                 let row = document.createElement("tr");
+
+//                 let values = [
+//                     item.appliance,
+//                     minutes + "m " + remainingSeconds + "s",
+//                     Number(item.units).toFixed(2),
+//                     "₹" + Number(item.amount).toFixed(2),
+//                     new Date(item.created_at).toLocaleString()
+//                 ];
+
+//                 values.forEach(function(value) {
+//                     let cell = document.createElement("td");
+//                     cell.textContent = value;
+//                     row.appendChild(cell);
+//                 });
+
+//                 history.appendChild(row);
+
+//             });
+
+//         })
+//         .catch(function(error) {
+//             console.log("History loading error:", error);
+//         });
+// }
+
+// loadUsageHistory();
