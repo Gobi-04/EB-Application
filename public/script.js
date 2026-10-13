@@ -338,7 +338,11 @@ function displayUsageHistory() {
     // 5 mela records irundha button show more display pannum, otherwise hide pannum
     if(allUsageRecords.length > 5) {
         showMoreBtn.style.display = "inline-block";
-        showMoreBtn.textContent = showAllHistory ? "Show Less" : "Show More";
+        if(showAllHistory) {
+            showMoreBtn.textContent = "Show Less";
+        } else {
+            showMoreBtn.textContent = "Show More";
+        }
     } else {
         showMoreBtn.style.display = "none";
     }
@@ -352,47 +356,3 @@ function showMoreHistory() {
 
 // Initial load 
 loadUsageHistory();
-
-//             let history = document.getElementById("usageHistory");
-
-//             history.innerHTML = "";
-
-//             if (records.length === 0) {
-//                 history.innerHTML =
-//                     "<tr><td colspan='5'>No records found</td></tr>";
-//                 return;
-//             }
-
-//             records.forEach(function(item) {
-
-//                 let seconds = Number(item.seconds);
-//                 let minutes = Math.floor(seconds / 60);
-//                 let remainingSeconds = seconds % 60;
-
-//                 let row = document.createElement("tr");
-
-//                 let values = [
-//                     item.appliance,
-//                     minutes + "m " + remainingSeconds + "s",
-//                     Number(item.units).toFixed(2),
-//                     "₹" + Number(item.amount).toFixed(2),
-//                     new Date(item.created_at).toLocaleString()
-//                 ];
-
-//                 values.forEach(function(value) {
-//                     let cell = document.createElement("td");
-//                     cell.textContent = value;
-//                     row.appendChild(cell);
-//                 });
-
-//                 history.appendChild(row);
-
-//             });
-
-//         })
-//         .catch(function(error) {
-//             console.log("History loading error:", error);
-//         });
-// }
-
-// loadUsageHistory();
