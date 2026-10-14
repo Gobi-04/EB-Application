@@ -134,6 +134,18 @@ p {
     font-size: 25px;
 }
 
+
+/* Hide all appliance details by default */
+.details {
+    display: none;
+}
+
+/* Show only the selected appliance details */
+.details.active {
+    display: block;
+}
+
+
 /* ===== Selected Appliance Details ===== */
 .device {
     display: flex;

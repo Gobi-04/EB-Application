@@ -1,0 +1,10 @@
+CREATE DATABASE IF NOT EXISTS eb_application;
+USE eb_application;
+
+CREATE TABLE IF NOT EXISTS usage_records (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	appliance VARCHAR(50) NOT NULL,
+	seconds INT NOT NULL,
+	units DECIMAL(10, 2) NOT NULL,
+	amount DECIMAL(10, 2) NOT NULL
+);
