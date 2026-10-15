@@ -7,6 +7,19 @@ const app = express();
 app.use(express.json());
 app.use(express.static("public"));
 
+// Example rated wattages. Replace with the wattage printed on each appliance.
+const APPLIANCE_WATTS = {
+    tv: 100,
+    washing: 500,
+    light: 9,
+    fridge: 150,
+    fan: 75
+};
+
+// Used only for a rough appliance-level cost estimate.
+// This is NOT the final household slab tariff.
+const ESTIMATED_BASE_RATE = 4.70;
+
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
@@ -23,32 +36,43 @@ db.connect(function (err) {
     console.log("MySQL connected successfully!");
 });
 
+// Convert wattage and runtime into kWh (electricity units).
+function calculateUnits(appliance, seconds) {
+    const watts = APPLIANCE_WATTS[appliance];
+
+    return (watts * seconds) / 3600000;
+}
+
+// Get saved usage history.
 app.get("/api/usage", function (req, res) {
-    const sql = "SELECT * FROM usage_records ORDER BY id DESC";
+    const sql = `
+        SELECT id, appliance, seconds, units, amount, created_at
+        FROM usage_records
+        ORDER BY id DESC
+    `;
 
     db.query(sql, function (err, results) {
         if (err) {
-            return res.status(500).json({ error: err.message });
+            console.error("History query failed:", err.message);
+            return res.status(500).json({
+                error: "Failed to load usage history"
+            });
         }
 
         res.json(results);
     });
 });
 
+// Save appliance usage.
 app.post("/api/usage", function (req, res) {
     const { appliance, seconds } = req.body;
 
-    const validAppliances = [
-        "tv",
-        "washing",
-        "light",
-        "fridge",
-        "fan"
-    ];
-
     if (
-        !validAppliances.includes(appliance) ||
-        !Number.isInteger(seconds) ||
+        !Object.prototype.hasOwnProperty.call(
+            APPLIANCE_WATTS,
+            appliance
+        ) ||
+        !Number.isSafeInteger(seconds) ||
         seconds < 0
     ) {
         return res.status(400).json({
@@ -56,8 +80,13 @@ app.post("/api/usage", function (req, res) {
         });
     }
 
-    const units = seconds / 30;
-    const amount = units;
+    const watts = APPLIANCE_WATTS[appliance];
+
+    const units = calculateUnits(appliance, seconds);
+
+    // Approximate appliance cost only.
+    // Household slab/free-unit benefits are not applied here.
+    const amount = units * ESTIMATED_BASE_RATE;
 
     const sql = `
         INSERT INTO usage_records
@@ -70,23 +99,28 @@ app.post("/api/usage", function (req, res) {
         [appliance, seconds, units, amount],
         function (err, result) {
             if (err) {
+                console.error("Usage save failed:", err.message);
+
                 return res.status(500).json({
-                    error: err.message
+                    error: "Failed to save usage"
                 });
             }
 
-            res.json({
+            res.status(201).json({
                 message: "Usage saved successfully",
                 id: result.insertId,
                 appliance: appliance,
                 seconds: seconds,
-                units: units,
-                amount: amount
+                watts: watts,
+                units: Number(units.toFixed(6)),
+                amount: Number(amount.toFixed(2))
             });
         }
     );
 });
 
-app.listen(process.env.PORT || 3000, function () {
-    console.log("Server running at http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, function () {
+    console.log(`Server running at http://localhost:${PORT}`);
 });
