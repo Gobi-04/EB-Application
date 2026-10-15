@@ -320,7 +320,8 @@ function displayUsageHistory() {
     const history = document.getElementById("usageHistory");
     const showMoreBtn = document.getElementById("showMorebtn");
 
-    if (!history || !showMoreBtn) {
+    if (!history) {
+        console.error("History table element not found");
         return;
     }
 
@@ -344,13 +345,13 @@ function displayUsageHistory() {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = seconds % 60;
 
-        const parsedDate = item.created_at
+        const date = item.created_at
             ? new Date(item.created_at)
             : null;
 
         const dateText =
-            parsedDate && !Number.isNaN(parsedDate.getTime())
-                ? parsedDate.toLocaleString()
+            date && !Number.isNaN(date.getTime())
+                ? date.toLocaleString()
                 : "Date unavailable";
 
         const values = [
@@ -372,13 +373,15 @@ function displayUsageHistory() {
         history.appendChild(row);
     });
 
-    if (allUsageRecords.length > 5) {
-        showMoreBtn.style.display = "inline-block";
-        showMoreBtn.textContent = showAllHistory
-            ? "Show Less"
-            : "Show More";
-    } else {
-        showMoreBtn.style.display = "none";
+    if(showMoreBtn) {
+        if (allUsageRecords.length > 5) {
+            showMoreBtn.style.display = "inline-block";
+            showMoreBtn.textContent = showAllHistory
+                ? "Show Less"
+                : "Show More";
+        } else {
+            showMoreBtn.style.display = "none";
+        }
     }
 }
 

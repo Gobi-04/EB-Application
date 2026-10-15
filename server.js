@@ -44,18 +44,18 @@ function calculateUnits(appliance, seconds) {
 }
 
 // Get saved usage history.
+
 app.get("/api/usage", function (req, res) {
-    const sql = `
-        SELECT id, appliance, seconds, units, amount, created_at
-        FROM usage_records
-        ORDER BY id DESC
-    `;
+    const sql = "SELECT * FROM usage_records ORDER BY id DESC";
 
     db.query(sql, function (err, results) {
         if (err) {
-            console.error("History query failed:", err.message);
+            console.error("MYSQL HISTORY ERROR:", err);
+            
+            // Development debugging only
             return res.status(500).json({
-                error: "Failed to load usage history"
+                error: err.message,
+                code: err.code
             });
         }
 
