@@ -150,17 +150,21 @@ function updateAppliance(name) {
 
 function updateTotal() {
 
-    let totalSeconds = 0;
+    let totalUnits = 0;
+    let totalAmount = 0;
 
     for (let name in appliances) {
-        totalSeconds += appliances[name].seconds;
+        const seconds = appliances[name].seconds;
+
+        totalUnits += seconds / 30;
+        totalAmount += seconds / 30; // Assuming 1 unit = 1 rupee
     }
 
     document.getElementById("totalUnit").innerText =
-        getUnit(totalSeconds).toFixed(2);
+        totalUnits.toFixed(2);
 
     document.getElementById("totalAmount").innerText =
-        getAmount(totalSeconds).toFixed(2);
+        totalAmount.toFixed(2);
 
 }
 
